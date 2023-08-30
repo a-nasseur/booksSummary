@@ -10,7 +10,7 @@ const addSummary = (values: Summary) => client.post(url, values);
 const getSummaries = () => client.get(url);
 
 // delete
-const deleteSummary = (id: number) => client.delete(url, id.toString())
+const deleteSummary = (id: number) => client.delete(`${url}?id=${id}`)
 
 
 export default { addSummary, getSummaries, deleteSummary }

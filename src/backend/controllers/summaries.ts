@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateSummary } from "../lib/validation";
-import { addSummaryService, getSummariesService } from "../services/summeries";
+import { addSummaryService, deleteSummaryService, getSummariesService } from "../services/summeries";
 
 
 const addSummary = async (request: NextRequest, response: Response) => {
@@ -36,9 +36,13 @@ const getSummaries = async () => {
 }
 
 const deleteSummary = async (request: NextRequest, response: Response) => {
-    const body = await request.json()
+    const params = request.nextUrl.searchParams;
+    
+    const id = params.get('id');
 
-    return body;
+    const deleted = await deleteSummaryService(id as string);
+
+    return deleted;
 }
 
 export { addSummary, getSummaries, deleteSummary }

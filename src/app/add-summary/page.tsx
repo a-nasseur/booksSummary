@@ -81,7 +81,7 @@ export default function AddResume () {
 
         return () => {}
         
-    }, [data]);
+    }, [data, dispatch, reset]);
 
 
 

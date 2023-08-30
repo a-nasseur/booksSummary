@@ -6,8 +6,7 @@ import Loading from '@/animations/loading-animation.json';
 export default function loading () {
     return (
         <div className="h-screen w-full flex justify-center items-center">
-            {/* <Lottie animationData={Loading} /> */}
-            <h1 className="text-3xl">Loading .....</h1>
+            <h1 className="text-xl pr-2">Loading</h1><span className="loading loading-dots loading-md bg-primary"></span>
         </div>
     )
 }

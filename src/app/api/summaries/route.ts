@@ -25,5 +25,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
 
 export async function DELETE (request: NextRequest, response: NextResponse) {
-   return new Response('ok')
+    const deleted = await deleteSummary(request, response)
+
+    const res = NextResponse.json(deleted);
+
+    return res;
+
 }

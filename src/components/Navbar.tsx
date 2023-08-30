@@ -1,43 +1,75 @@
 'use client'
 
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { Oval } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { searchSummary } from "@/state/features/summarySlice";
+import { RootState } from "@/state/store";
 
 export default function Navbar (): JSX.Element {
+    const { data: session } = useSession();
+    const dispatch = useDispatch();
+    const [search, setSearch] = useState<string>('');
+    const summaries = useSelector((state: RootState) => state.summary.summaries);
+   
+
+    useEffect(() => {
+        dispatch(searchSummary(search));
+    }, [search])    
+    
     return (
-        <div className="navbar bg-base-100 shadow-md">
-            <div className="navbar-start">
-                <div className="dropdown">
-                <label tabIndex={0} className="btn btn-ghost btn-circle">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
+        <>
+            <div className="navbar bg-base-100 shadow-lg">
+            <div className="flex-1">
+                <Link href='/' className="btn btn-ghost normal-case text-xl">Books Summary</Link>
+            </div>
+            <div className="flex-none gap-2">
+            <div className="form-control">
+                <input 
+                    type="text" 
+                    placeholder="Search" 
+                    className="input input-bordered w-24 md:w-auto" 
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+            </div>
+            <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                    {
+                        session?.user.image ? 
+                        <Image 
+                            src={session?.user.image}  
+                            alt={`${session?.user.name} image`} 
+                            width={64} 
+                            height={64}
+                        />
+                        :
+                        <span className="loading loading-ring loading-lg bg-primary"></span>
+                    }
+                </div>
                 </label>
-                <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li>
-                        <Link href='/'>Homepage</Link>
-                    </li>
-                    <li>
-                        <Link href='/add-summary'>Add summary</Link>
-                    </li>
-                    <li>
-                        <a onClick={() => signOut()}>sign out</a>
-                    </li> 
+                <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                <li>
+                    <a className="justify-between">
+                        Add summary
+                    <span className="badge">New</span>
+                    </a>
+                </li>
+                <li>
+                    <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                    </a>
+                </li>
+                <li><a>Settings</a></li>
+                <li onClick={() => signOut()}><a>Logout</a></li>
                 </ul>
-                </div>
             </div>
-            <div className="navbar-center">
-                <Link href='/' className="btn btn-ghost normal-case text-xl">My Book Summary</Link>
-            </div>
-            <div className="navbar-end">
-                <button className="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                </button>
-                <button className="btn btn-ghost btn-circle">
-                <div className="indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                    <span className="badge badge-xs badge-primary indicator-item"></span>
-                </div>
-                </button>
             </div>
         </div>
+        </>
     )
 }

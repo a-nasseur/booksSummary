@@ -1,7 +1,7 @@
 'use client'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { getAllSummaries } from '@/state/features/summarySlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllSummaries } from '@/state/features/summarySlice';
 
 
 import Card from "./Card"
@@ -10,12 +10,16 @@ import { useEffect } from 'react'
 
 
 export default function CardsList ({ data }: any) {
+    // summaries Store
     const summaries = useSelector( (state: RootState) => state.summary.summaries)
-    const dispatch = useDispatch()
 
+    // dispatch store actions
+    const dispatch = useDispatch();
+
+    // Track useEffect state
     useEffect(() => {
         dispatch(getAllSummaries(data));
-    }, [])
+    }, []);
 
     return (
         <>
@@ -29,14 +33,13 @@ export default function CardsList ({ data }: any) {
                         pages={summary.pages}
                         edition={summary.edition}
                         summary={summary.summary}
-
                     />
                 </div>
                 ))
             }
             {
-                !summaries && 
-                <div className='h-screen w-full text-center flex justify-center items-center'>
+                !summaries &&
+                <div className='text-center flex justify-center items-center'>
                     <div>
                         <h1 className='text-2xl'>No summaries to show</h1>
                         <button className='btn btn-sm via-primary'>

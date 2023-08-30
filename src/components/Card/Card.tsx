@@ -1,12 +1,19 @@
 'use client';
-// local imports
-import summariesApi from "@/api/summeries";
-import { useDispatch } from "react-redux";
-import DeleteButton from "./DeleteButton";
-import { deleteSummary } from "@/state/features/summarySlice";
-import useApi from "@/hooks/useApi";
-import { useEffect } from "react";
 
+// local imports
+import { useEffect } from "react";
+import { PrismaClient } from "@prisma/client";
+
+
+import useApi from "@/hooks/useApi";
+import { deleteSummary } from "@/state/features/summarySlice";
+import DeleteButton from "./DeleteButton";
+import { useDispatch } from "react-redux";
+import summariesApi from "@/api/summeries";
+import { toast } from "react-toastify";
+import Link from "next/link";
+
+const prisma = new PrismaClient();
 
 export default function Card ({ id, title, author, pages, edition, summary }: Summary) {
     // dispatch store actions
@@ -18,12 +25,20 @@ export default function Card ({ id, title, author, pages, edition, summary }: Su
     // Handle delete api
     const handleDelete = async (id: number) => {
         request(id);
-        // dispatch(deleteSummary(id))
+
+        if(error) console.log(error);
+
+        dispatch(deleteSummary(id));
     };
 
     // tack data state
     // useEffect(() => {
-    //     console.log(data);
+    //     if(data?.success){
+    //         toast.success('Deleted successfully');
+    //     }
+    //     if(!data?.success){
+    //         toast.error('An error has occured, please try again later')
+    //     }
     // }, [data])
    
     
@@ -39,9 +54,15 @@ export default function Card ({ id, title, author, pages, edition, summary }: Su
                 <h6 className='text-gray-500'>{pages} pages</h6>
                 <p>{summary.slice(0, 150)}...</p>
                 <div className="card-actions mt-5">
-                    <button className="btn btn-primary btn-sm">Read summary</button>
+                    <Link 
+                        href={`/summaries/${id}`}
+                        className="btn btn-primary btn-sm"
+                    >
+                            Read summary
+                    </Link>
                 </div>
             </div>
         </div>
+        
     )
 }

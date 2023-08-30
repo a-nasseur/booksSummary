@@ -5,9 +5,18 @@ type ButtonProps = {
 }
 
 export default function DeleteButton ({ handleDelete }: ButtonProps) {
+
     return (
-        <button onClick={handleDelete}> 
-            <TrashIcon className="text-red-400" width={22} height={22} />
-        </button>
+        <>
+            <button 
+                className="btn bg-transparent hover:bg-gray-100"
+                onClick={handleDelete}
+            > 
+                <TrashIcon className="text-red-400" width={22} height={22} />
+            </button>
+            
+        </>
     )
 }
+
+
